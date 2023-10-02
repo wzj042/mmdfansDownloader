@@ -100,12 +100,12 @@
         a.click();
         a.remove();
         downloadFlag = true;
-        window.history.back();
         setTimeout(function () {
             // 尝试调用返回
             // 关闭页面(没捋顺，先不关闭了)
             // window.close();
-        }, 1500);
+            window.history.back();
+        }, 500);
     }
 
 
