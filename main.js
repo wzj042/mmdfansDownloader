@@ -6,6 +6,8 @@
 // @author       wzj042
 // @match        https://mmdfans.net/mmd/*
 // @match        https://cdn.mmdlibrary.eu.org/*
+// @match        https://cdn.mmdlibrary2.eu.org/*
+// @match        https://cdn.mmdlibrary3.eu.org/*
 // @match        https://cdn.bakabakaxi.eu.org/*
 // @match        https://cdn.baka6.eu.org/*
 // @match        https://cdn.baka7.eu.org/*
@@ -21,6 +23,8 @@
     // 如果当前视频使用的cdn不在列表中，可以添加到列表中
     const cdn_list = [
         'https://cdn.mmdlibrary.eu.org',
+        'https://cdn.mmdlibrary2.eu.org',
+        'https://cdn.mmdlibrary3.eu.org',
         'https://cdn.bakabakaxi.eu.org',
         'https://cdn.baka6.eu.org',
         'https://cdn.baka7.eu.org',
@@ -42,6 +46,11 @@
                 const titleElement = document.querySelector('h2.title');
                 const title = titleElement ? titleElement.textContent.trim() : '无标题';
 
+                // 获取作者名
+                const authorElement = document.querySelector('.tag-container > a > button');
+                const authorName = authorElement ? authorElement.textContent.trim() : '无作者';
+
+
 
                 // 创建下载按钮
                 const downloadButton = document.createElement('button');
@@ -62,7 +71,7 @@
                         return;
                     }
                     // 使downloadLink加上title = title参数
-                    download(downloadLink + '?title=' + title, title);
+                    download(downloadLink + '?title=' + title + '&author=' + authorName, title, authorName);
                 };
 
                 // 将下载按钮添加到页面
@@ -81,9 +90,10 @@
                         // 尝试从title参数中获取title，无则默认无标题
                         const url = new URL(window.location.href);
                         const title = url.searchParams.get('title') || '无标题';
+                        const author = url.searchParams.get('author') || '无作者';
                         const downloadLink = window.location.href;
                         
-                        download(downloadLink, title);
+                        download(downloadLink, title, author);
                         break;
                     }
                 }
@@ -93,9 +103,9 @@
         }
     };
 
-    function download(url, title) {
+    function download(url, title, author) {
         const a = document.createElement("a");
-        a.download = `[iwara] ${title}.mp4`;
+        a.download = `[iwara][${author}] ${title}.mp4`;
         a.href = url;
         a.click();
         a.remove();
