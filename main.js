@@ -77,11 +77,6 @@
                 // 将下载按钮添加到页面
                 const tagContainer = document.querySelector('.tag-container');
                 tagContainer.appendChild(downloadButton);
-
-
-
-
-                break;
             } else if(!downloadFlag){
                 // 检测当前页面开头是否是cdn链接，如果是，调用download
                 for (let i = 0; i < cdn_list.length; i++) {
