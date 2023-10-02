@@ -10,6 +10,7 @@
 // @match        https://cdn.baka6.eu.org/*
 // @match        https://cdn.baka7.eu.org/*
 // @match        https://cdn.baka8.eu.org/*
+// @match        https://cdn.baka9.eu.org/*
 // @license MIT
 // @grant        none
 // ==/UserScript==
@@ -20,12 +21,13 @@
     // 如果当前视频使用的cdn不在列表中，可以添加到列表中
     const cdn_list = [
         'https://cdn.mmdlibrary.eu.org/',
-        'https://cdn.baka6.eu.org/',
         'https://cdn.bakabakaxi.eu.org',
         'https://cdn.bakabakaxi.eu.org',
-        'https://cdn.baka8.eu.org/',
         'https://cdn.mmdlibrary.eu.org/',
+        'https://cdn.baka6.eu.org/',
         'https://cdn.baka7.eu.org/',
+        'https://cdn.baka8.eu.org/',
+        'https://cdn.baka9.eu.org/',
     ]
     // 延迟执行代码，等待视频标签加载完成
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
