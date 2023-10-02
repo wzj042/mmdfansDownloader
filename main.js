@@ -38,17 +38,17 @@
         while (true) {
             const videoTag = document.getElementsByClassName('mdui-video-fluid');
             // 获取视频下载链接
-                const sourceElement = document.querySelector('video source');
-                const downloadLink = sourceElement ? sourceElement.getAttribute('src') : '';
+            const sourceElement = document.querySelector('video source');
+            const downloadLink = sourceElement ? sourceElement.getAttribute('src') : '';
+            // 获取视频标题
+            const titleElement = document.querySelector('h2.title');
+            const title = titleElement ? titleElement.textContent.trim() : '无标题';
+
+            // 获取作者名
+            const authorElement = document.querySelector('.tag-container > a > button');
+            const authorName = authorElement ? authorElement.textContent.trim() : '无作者';
 
             if (videoTag.length > 0) {
-                // 获取视频标题
-                const titleElement = document.querySelector('h2.title');
-                const title = titleElement ? titleElement.textContent.trim() : '无标题';
-
-                // 获取作者名
-                const authorElement = document.querySelector('.tag-container > a > button');
-                const authorName = authorElement ? authorElement.textContent.trim() : '无作者';
 
 
 
@@ -77,7 +77,45 @@
                 // 将下载按钮添加到页面
                 const tagContainer = document.querySelector('.tag-container');
                 tagContainer.appendChild(downloadButton);
-            } else if(!downloadFlag){
+
+                // 添加间隔
+                const space = document.createElement('span');
+                space.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
+                tagContainer.appendChild(space);
+                
+
+                // 添加复制cdn链接按钮，点击复制下载链接的baseurl部分
+                const copyCdnButton = document.createElement('button');
+                copyCdnButton.innerHTML = '复制cdn链接';
+                copyCdnButton.classList.add('mdui-btn', 'mdui-color-theme-accent', 'mdui-ripple');
+
+                copyCdnButton.onclick = function () {
+                    // 检测当前页面开头是否是cdn链接，如果不是，返回并提示手动添加cdn
+
+                    let isCdnLink = false;
+                    for (let i = 0; i < cdn_list.length; i++) {
+                        if (downloadLink.startsWith(cdn_list[i])) {
+                            isCdnLink = true;
+                            break;
+                        }
+                    }
+                    if (!isCdnLink) {
+                        alert('当前链接不是cdn链接，请手动添加cdn');
+                        return;
+                    }
+                    // 复制下载链接的host部分
+                    const url = new URL(downloadLink);
+                    navigator.clipboard.writeText(url.protocol + '//' + url.host);
+                    // 提示复制成功
+                    alert('复制成功');
+
+                }
+
+                tagContainer.appendChild(copyCdnButton);
+
+                break;
+
+            } else if (!downloadFlag) {
                 // 检测当前页面开头是否是cdn链接，如果是，调用download
                 for (let i = 0; i < cdn_list.length; i++) {
                     if (window.location.href.startsWith(cdn_list[i])) {
@@ -87,7 +125,7 @@
                         const title = url.searchParams.get('title') || '无标题';
                         const author = url.searchParams.get('author') || '无作者';
                         const downloadLink = window.location.href;
-                        
+
                         download(downloadLink, title, author);
                         break;
                     }
