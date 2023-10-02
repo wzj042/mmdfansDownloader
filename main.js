@@ -20,15 +20,14 @@
     'use strict';
     // 如果当前视频使用的cdn不在列表中，可以添加到列表中
     const cdn_list = [
-        'https://cdn.mmdlibrary.eu.org/',
+        'https://cdn.mmdlibrary.eu.org',
         'https://cdn.bakabakaxi.eu.org',
-        'https://cdn.bakabakaxi.eu.org',
-        'https://cdn.mmdlibrary.eu.org/',
-        'https://cdn.baka6.eu.org/',
-        'https://cdn.baka7.eu.org/',
-        'https://cdn.baka8.eu.org/',
-        'https://cdn.baka9.eu.org/',
+        'https://cdn.baka6.eu.org',
+        'https://cdn.baka7.eu.org',
+        'https://cdn.baka8.eu.org',
+        'https://cdn.baka9.eu.org',
     ]
+    let downloadFlag = false; // 是否已经下载过，防止重复下载
     // 延迟执行代码，等待视频标签加载完成
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     const checkVideoTag = async () => {
@@ -74,7 +73,7 @@
 
 
                 break;
-            } else {
+            } else if(!downloadFlag){
                 // 检测当前页面开头是否是cdn链接，如果是，调用download
                 for (let i = 0; i < cdn_list.length; i++) {
                     if (window.location.href.startsWith(cdn_list[i])) {
@@ -83,7 +82,7 @@
                         const url = new URL(window.location.href);
                         const title = url.searchParams.get('title') || '无标题';
                         const downloadLink = window.location.href;
-
+                        
                         download(downloadLink, title);
                         break;
                     }
@@ -100,11 +99,13 @@
         a.href = url;
         a.click();
         a.remove();
-
+        downloadFlag = true;
+        window.history.back();
         setTimeout(function () {
             // 尝试调用返回
-            window.history.back();
-        }, 500);
+            // 关闭页面(没捋顺，先不关闭了)
+            // window.close();
+        }, 1500);
     }
 
 
