@@ -10,6 +10,7 @@
 // @match        https://cdn.baka6.eu.org/*
 // @match        https://cdn.baka7.eu.org/*
 // @match        https://cdn.baka8.eu.org/*
+// @license MIT
 // @grant        none
 // ==/UserScript==
 
