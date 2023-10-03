@@ -148,7 +148,7 @@
             // 尝试调用返回
             // 关闭页面(没捋顺，先不关闭了)
             // window.close();
-            if (isCdnLink(url)) {
+            if (isCdnLink(window.location.href)) {
                 window.history.back();
             }
         }, 500);
