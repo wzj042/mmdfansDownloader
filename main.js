@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mmdfans一键下载
 // @namespace    http://tampermonkey.net/
-// @version      1.0.1
+// @version      1.0.2
 // @description  在网页上检测视频标签并获取标题和下载链接，点击下载按钮会跳转到视频链接下载并尝试返回页面。
 // @author       wzj042
 // @match        https://mmdfans.net/mmd/*
