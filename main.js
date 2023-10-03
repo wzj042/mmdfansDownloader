@@ -143,15 +143,17 @@
         a.href = url;
         a.click();
         a.remove();
-        downloadFlag = true;
         setTimeout(function () {
             // 尝试调用返回
             // 关闭页面(没捋顺，先不关闭了)
             // window.close();
-            if (isCdnLink(window.location.href)) {
+            if (isCdnLink(window.location.href) && downloadFlag) {
                 window.history.back();
             }
-        }, 500);
+            downloadFlag = false;
+        }, 1100);
+        
+        downloadFlag = true;
     }
 
 
