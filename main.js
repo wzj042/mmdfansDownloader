@@ -55,15 +55,9 @@
                 downloadButton.classList.add('mdui-btn', 'mdui-color-theme-accent', 'mdui-ripple');
 
                 downloadButton.onclick = function () {
-                    // 检测当前页面开头是否是cdn链接，如果不是，返回并提示手动添加cdn
-                    let isCdnLink = false;
-                    for (let i = 0; i < cdn_list.length; i++) {
-                        if (downloadLink.startsWith(cdn_list[i])) {
-                            isCdnLink = true;
-                            break;
-                        }
-                    }
-                    if (!isCdnLink) {
+                    // 检测当前视频url开头是否是cdn链接，如果不是，返回并提示手动添加cdn
+                    let cdnFlag = isCdnLink(downloadLink)
+                    if (!cdnFlag) {
                         alert('当前链接不是cdn链接，请手动添加cdn');
                         return;
                     }
