@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         mmdfans一键下载
 // @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  在网页上检测视频标签并获取标题和下载链接，点击下载按钮会跳转到视频链接并尝试关闭页面。支持链接-标题键值对的保存和匹配。
+// @version      1.0.1
+// @description  在网页上检测视频标签并获取标题和下载链接，点击下载按钮会跳转到视频链接下载并尝试返回页面。
 // @author       wzj042
 // @match        https://mmdfans.net/mmd/*
 // @match        https://cdn.mmdlibrary.eu.org/*
@@ -13,11 +13,10 @@
 // @match        https://cdn.baka7.eu.org/*
 // @match        https://cdn.baka8.eu.org/*
 // @match        https://cdn.baka9.eu.org/*
-// @license MIT
+// @license      MIT
 // @grant        none
 // ==/UserScript==
 
-// ![使用预览](https://picx.zhimg.com/v2-3c789a08a942a5a39b360572cf54ac20.gif)
 (function () {
     'use strict';
     // 如果当前视频使用的cdn不在列表中，可以添加到列表中
@@ -50,8 +49,6 @@
 
             if (videoTag.length > 0) {
 
-
-
                 // 创建下载按钮
                 const downloadButton = document.createElement('button');
                 downloadButton.innerHTML = '下载视频';
@@ -80,7 +77,7 @@
 
                 // 添加间隔
                 const space = document.createElement('span');
-                space.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
+                space.innerHTML = '&nbsp;&nbsp;';
                 tagContainer.appendChild(space);
                 
 
@@ -117,24 +114,28 @@
 
             } else if (!downloadFlag) {
                 // 检测当前页面开头是否是cdn链接，如果是，调用download
-                for (let i = 0; i < cdn_list.length; i++) {
-                    if (window.location.href.startsWith(cdn_list[i])) {
-                        console.log('start download with cdn link');
-                        // 尝试从title参数中获取title，无则默认无标题
-                        const url = new URL(window.location.href);
-                        const title = url.searchParams.get('title') || '无标题';
-                        const author = url.searchParams.get('author') || '无作者';
-                        const downloadLink = window.location.href;
+                const curUrl = window.location.href
+                if (isCdnLink(curUrl)) {
+                    const url = new URL(curUrl);
+                    const title = url.searchParams.get('title') || '无标题';
+                    const author = url.searchParams.get('author') || '无作者';
 
-                        download(downloadLink, title, author);
-                        break;
-                    }
+                    download(curUrl, title, author);
                 }
             }
 
             await delay(1000); // 等待下一次检查
         }
     };
+
+    function isCdnLink(url) {
+        for (let i = 0; i < cdn_list.length; i++) {
+            if (url.startsWith(cdn_list[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     function download(url, title, author) {
         const a = document.createElement("a");
@@ -147,7 +148,9 @@
             // 尝试调用返回
             // 关闭页面(没捋顺，先不关闭了)
             // window.close();
-            window.history.back();
+            if (isCdnLink(url)) {
+                window.history.back();
+            }
         }, 500);
     }
 
