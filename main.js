@@ -13,6 +13,7 @@
 // @match        https://cdn.baka7.eu.org/*
 // @match        https://cdn.baka8.eu.org/*
 // @match        https://cdn.baka9.eu.org/*
+// @match        https://cirno.baka9.eu.org/*
 // @license      MIT
 // @grant        none
 // ==/UserScript==
@@ -33,6 +34,7 @@
         'https://cdn.baka7.eu.org',
         'https://cdn.baka8.eu.org',
         'https://cdn.baka9.eu.org',
+        'https://cirno.baka9.eu.org',
         // 添加你要添加的 CDN 链接
     ]
 
