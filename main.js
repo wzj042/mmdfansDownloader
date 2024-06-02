@@ -19,7 +19,7 @@
 
 (function () {
     'use strict';
-    // 如果当前视频使用的cdn不在列表中，可以添加到列表中
+
     const cdn_list = [
         'https://cdn.mmdlibrary.eu.org',
         'https://cdn.mmdlibrary2.eu.org',
@@ -30,12 +30,15 @@
         'https://cdn.baka8.eu.org',
         'https://cdn.baka9.eu.org',
     ]
-    let downloadFlag = false; // 是否已经下载过，防止重复下载
-    // 延迟执行代码，等待视频标签加载完成
+
+    let downloadFlag = false; 
+
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
     const checkVideoTag = async () => {
         while (true) {
             const videoTag = document.getElementsByClassName('mdui-video-fluid');
+            
             // 获取视频下载链接
             const sourceElement = document.querySelector('video source');
             const downloadLink = sourceElement ? sourceElement.getAttribute('src') : '';
@@ -107,7 +110,7 @@
                 break;
 
             } else if (!downloadFlag) {
-                // 检测当前页面开头是否是cdn链接，如果是，调用download
+                // 检测当前页面开头是否是 CDN 链接，如果是，调用download
                 const curUrl = window.location.href
                 if (isCdnLink(curUrl)) {
                     const url = new URL(curUrl);
@@ -122,6 +125,11 @@
         }
     };
 
+    /**
+     * 检查当前页面是否为 mmdfans 视频的 CDN 链接
+     * @param   {string}  url - 当前页面链接 
+     * @returns {boolean}     - 如果是 mmdfans 视频的 CDN 链接，则返回 true，否则返回 false
+     */
     function isCdnLink(url) {
         for (let i = 0; i < cdn_list.length; i++) {
             if (url.startsWith(cdn_list[i])) {
@@ -138,9 +146,9 @@
         a.click();
         a.remove();
         setTimeout(function () {
-            // 尝试调用返回
-            // 关闭页面(没捋顺，先不关闭了)
-            // window.close();
+            /**
+             * 下载完成后返回上一页
+             */
             if (isCdnLink(window.location.href) && downloadFlag) {
                 window.history.back();
             }
