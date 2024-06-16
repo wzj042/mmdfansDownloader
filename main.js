@@ -50,6 +50,19 @@
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+    // 加一个下载防抖事件
+    const downloadDebounce = (function () {
+        let timer = null;
+        return function (pathUrl) {
+            if (timer) {
+                clearTimeout(timer);
+            }
+            timer = setTimeout(() => {
+                download(pathUrl);
+            }, 500);
+        };
+    })();
+
     /**
      * 检查视频标签是否存在，如果存在则添加下载按钮
      */
@@ -75,7 +88,7 @@
             } else if (!downloadFlag) {
                 const curUrl = window.location.href
                 if (isCdnLink(curUrl)) {
-                    download(curUrl);
+                    downloadDebounce(curUrl);
                 }
             }
 
@@ -95,7 +108,6 @@
     function download(pathUrl) {
         const a = document.createElement("a");
         const url = new URL(pathUrl);
-
         const downloadURL = url.protocol + '//' + url.host + url.pathname;
         const filename = url.searchParams.get('filename');
 
@@ -136,8 +148,8 @@
             const value = videoInfo[param];
             filename = filename.replace(`{${param}}`, value);
         });
-        
-        return `${videoInfo.downloadLink}?filename=${filename}`;
+        // 为了防止文件名中含有特殊字符，需要对文件名进行编码
+        return `${videoInfo.downloadLink}?filename=${encodeURIComponent(filename)}`;
     }
 
     function createFilenameInput() {
@@ -196,7 +208,7 @@
                 return;
             }
 
-            download(filename2Url(gatherFilenameInfo(), videoInfo));
+            downloadDebounce(filename2Url(gatherFilenameInfo(), videoInfo));
         };
 
         const tagContainer = document.querySelector('.tag-container');
