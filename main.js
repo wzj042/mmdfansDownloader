@@ -64,6 +64,7 @@
             if (videoTag.length > 0) {
                 const videoInfo = gatherVideoInfo(downloadLink, title);
 
+                createTagContainer();
                 createDownloadButton(videoInfo);
                 createCopyCdnButton(videoInfo.baseurl);
                 createJsonButton(videoInfo);
@@ -169,6 +170,16 @@
         tagContainer.appendChild(filenameInput);
         tagDivider.parentNode.insertBefore(tagContainer, tagDivider);
 
+    }
+
+    /**
+     * 在标题上方添加一个标签容器，用于存放下载按钮
+     */
+    function createTagContainer() {
+        const tagContainer = document.createElement('div');
+        tagContainer.classList.add('tag-container');
+        const titleDiv = document.querySelector('.mdui-typo');
+        titleDiv.parentNode.insertBefore(tagContainer, titleDiv);
     }
 
     function createDownloadButton(videoInfo) {
