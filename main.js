@@ -38,6 +38,22 @@
         // 添加你要添加的 CDN 链接
     ]
 
+    /**
+     * 自定义文件名的 slot
+     * name: slot 名称
+     * transform: 转换函数
+     * source: 数据来源
+    */
+    const CUSTOM_FILENAME_SLOT = [
+        {
+            name: 'postDate',
+            transform: (postAt) => {
+                const datePart = postAt.split(' ')[0];
+                return datePart;
+            },
+            source: (videoInfo) => videoInfo['postAt']
+        } 
+    ]
     
     let downloadFlag = false; 
     const TIME_OUT = 1000;
@@ -145,7 +161,14 @@
 
         // 匹配 params 和 videoInfo 中的属性
         params.forEach(param => {
-            const value = videoInfo[param];
+            let value = videoInfo[param];
+
+            // 如果是自定义的 slot 则调用 transform 方法
+            const customSlot = CUSTOM_FILENAME_SLOT.find(slot => slot.name === param);
+            if (customSlot && customSlot.transform) {
+                value = customSlot.transform(customSlot.source(videoInfo));
+            }
+
             filename = filename.replace(`{${param}}`, value);
         });
         // 为了防止文件名中含有特殊字符，需要对文件名进行编码
