@@ -52,7 +52,14 @@
                 return datePart;
             },
             source: (videoInfo) => videoInfo['postAt']
-        } 
+        },
+        {
+            name: 'curDate',
+            transform: () => {
+                return new Date().toISOString().split('T')[0];
+            },
+            source: () => {}
+        }
     ]
     
     let downloadFlag = false; 
